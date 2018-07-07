@@ -14,12 +14,13 @@ public class JuliaExplorer extends JPanel implements KeyListener {
     private float yPower;
 
     public JuliaExplorer() {
-        zoomPower = 10;
-        xPower = 0.000001F;
-        yPower = 0.000001F;
+        zoomPower = 5;
+        xPower = 0.00001F;
+        yPower = 0.00001F;
         setPreferredSize(new Dimension(JuliaSet.WIDTH, JuliaSet.HEIGHT));
         addKeyListener(this);
         setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
         requestFocusInWindow();
     }
 
@@ -38,12 +39,13 @@ public class JuliaExplorer extends JPanel implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ADD) {
             xPower /= 0.1;
             yPower /= 0.1;
+            zoomPower *= 2;
         } else if (e.getKeyCode() == KeyEvent.VK_SUBTRACT) {
             xPower *= 0.1;
             yPower *= 0.1;
+            zoomPower /= 2;
         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             JuliaSet.getInstance().setZoom(JuliaSet.getInstance().getZoom() + zoomPower);
-            zoomPower *= 2;
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             JuliaSet.getInstance().setMoveX(JuliaSet.getInstance().getMoveX() - xPower);
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -54,7 +56,8 @@ public class JuliaExplorer extends JPanel implements KeyListener {
             JuliaSet.getInstance().setMoveY(JuliaSet.getInstance().getMoveY() + yPower);
         } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
             JuliaSet.getInstance().setZoom(JuliaSet.getInstance().getZoom() - zoomPower);
-            zoomPower /= 2;
+        } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+            JuliaSet.getInstance().setComplex(JuliaSet.getInstance().nextComplex());
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         }

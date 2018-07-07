@@ -15,21 +15,35 @@ public class JuliaSet {
     private int zoom;
     private double moveX;
     private double moveY;
-    public static final Complex COMPLEX;
+    private Complex complex;
+    public static final Complex[] COMPLEX_SETS;
+    private int currentSet;
 
     static {
-        instance = new JuliaSet();
-        COMPLEX = new Complex(-0.7, -0.27015);
+        COMPLEX_SETS = new Complex[]{
+                new Complex(-0.4,0.6),
+                new Complex(0.285, 0),
+                new Complex(0.285, 0.01),
+                new Complex(0.45,0.1428),
+                new Complex(-0.7, -0.27015),
+                new Complex(-0.835,-0.2321),
+                new Complex(-0.8,0.156),
+                new Complex(-0.7269, 0.1889)
+        };
+
         colors = new int[MAX_ITERATIONS];
         for (int i = 0; i<MAX_ITERATIONS; i++) {
-            colors[i] = Color.HSBtoRGB(i%256, -0.1F, i/(i+640f));
+            colors[i] = Color.HSBtoRGB(i%256, -0.1F, i/(i+640F));
         }
+        instance = new JuliaSet();
     }
 
     private JuliaSet() {
-        zoom = 200;
+        zoom = 1;
         moveX = 0.1F;
         moveY = 0;
+        complex = COMPLEX_SETS[0];
+        currentSet = 0;
     }
 
     public static JuliaSet getInstance() { return instance; }
@@ -45,7 +59,6 @@ public class JuliaSet {
         }
 
         return image;
-        //ImageIO.write(image, "png", new File("julia_set_fractal.png"));
     }
 
     /**
@@ -55,8 +68,8 @@ public class JuliaSet {
     private Color find(double c_r, double c_i) {
         int i = 0;
         while ( ((c_r * c_r) + (c_i * c_i)) < 4.0 && i < MAX_ITERATIONS ) {
-            double new_x = c_r * c_r - c_i * c_i + COMPLEX.getX();
-            c_i = 2.0 * c_r * c_i + COMPLEX.getY();
+            double new_x = c_r * c_r - c_i * c_i + complex.getX();
+            c_i = 2.0 * c_r * c_i + complex.getY();
             c_r = new_x;
             i++;
         }
@@ -94,5 +107,20 @@ public class JuliaSet {
 
     public void setMoveY(double moveY) {
         this.moveY = moveY;
+    }
+
+    public Complex nextComplex() {
+        if (currentSet == COMPLEX_SETS.length - 1) {
+            currentSet = 0;
+        } else {
+            currentSet++;
+        }
+        return COMPLEX_SETS[currentSet]; }
+
+    public void setComplex(Complex complex) {
+        zoom = 1;
+        moveX = 0.1F;
+        moveY = 0;
+        this.complex = complex;
     }
 }
