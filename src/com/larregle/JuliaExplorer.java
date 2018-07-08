@@ -7,13 +7,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JuliaExplorer extends JPanel implements KeyListener {
+    private final Set<Character> keyPressed;
     private int zoomPower;
     private float xPower;
     private float yPower;
 
     public JuliaExplorer() {
+        keyPressed = new HashSet<>();
         zoomPower = 5;
         xPower = 0.00001F;
         yPower = 0.00001F;
@@ -37,13 +41,20 @@ public class JuliaExplorer extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ADD) {
+            if (keyPressed.contains((char) KeyEvent.VK_CONTROL)) {
+                zoomPower *= 2;
+            }
             xPower /= 0.1;
             yPower /= 0.1;
-            zoomPower *= 2;
+        } else if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+            keyPressed.add((char) KeyEvent.VK_CONTROL);
         } else if (e.getKeyCode() == KeyEvent.VK_SUBTRACT) {
-            xPower *= 0.1;
-            yPower *= 0.1;
-            zoomPower /= 2;
+            if (keyPressed.contains((char) KeyEvent.VK_CONTROL)) {
+                zoomPower /= 2;
+            } else {
+                xPower *= 0.1;
+                yPower *= 0.1;
+            }
         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             JuliaSet.getInstance().setZoom(JuliaSet.getInstance().getZoom() + zoomPower);
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -68,5 +79,9 @@ public class JuliaExplorer extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+            keyPressed.remove((char)KeyEvent.VK_CONTROL);
+        }
+    }
 }
