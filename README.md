@@ -7,8 +7,10 @@ As the title says this allows you to explore the julia-set fractal.
 ## Input (Keyboard)
 * <b>ENTER</b> to zoom in.
 * <b>BACK_SPACE</b> to zoom out.
-* <b>'VK_ADD'</b> to augment the step size while moving in x coordinate and to augment the zoom.
-* <b>'VK_SUBTRACT'</b> to decrease the step size while moving in y coordinate and to and to decrease the zoom.
+* <b>'VK_ADD'</b> to augment the step size while moving in x coordinate.
+* <b>'VK_SUBTRACT'</b> to decrease the step size while moving in y coordinate.
+* <b> Holding CTRL and pressing VK_ADD will augment the zoom step.</b>
+* <b> Holding CTRL and pressing VK_SUBTRACT will decrement the zoom step.</b>
 * <b>TAB</b> to switch from the different Julia Sets available.
 * <b>ESCAPE</b> to close the application.
 
